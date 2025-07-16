@@ -71,6 +71,8 @@ You can find example n8n workflows created with the REST/MCP server [in this rep
 - Text-to-speech conversion
 - Automatic caption generation and styling
 - Background video search and selection via Pexels
+- Generate videos from a series of images with a Ken Burns effect
+- Media preview functionality to see images/videos before rendering
 - Background music with genre/mood selection
 - Serve as both REST API and Model Context Protocol (MCP) server
 
@@ -80,7 +82,7 @@ Shorts Creator takes simple text inputs and search terms, then:
 
 1. Converts text to speech using Kokoro TTS
 2. Generates accurate captions via Whisper
-3. Finds relevant background videos from Pexels
+3. Finds relevant background videos from Pexels. If the source is images, it creates animated clips using the Ken Burns effect.
 4. Composes all elements with Remotion
 5. Renders a professional-looking short video with perfectly timed captions
 
@@ -247,6 +249,7 @@ You can load it on http://localhost:3123
 | voice                  | The Kokoro voice.                                                                                              | `af_heart` |
 | orientation            | The video orientation. Possible options are `portrait` and `landscape`                                         | `portrait` |
 | musicVolume            | Set the volume of the background music. Possible options are `low` `medium` `high` and `muted`                 | `high`     |
+| media_type             | The source of the visuals. Can be `video` or `image`.                                                          | `video`    |
 
 # Usage
 
@@ -415,6 +418,18 @@ curl --location 'localhost:3123/api/music-tags'
 ]
 ```
 
+### GET `/api/preview`
+
+Returns a list of images or videos for a given search term.
+
+**Query Parameters:**
+- `term` (string, required): The search term.
+- `media_type` ('image' | 'video', required): The type of media to preview.
+
+```bash
+cURL localhost:3123/api/preview?term=nature&media_type=image
+```
+
 # Troubleshooting
 
 ## Docker
@@ -454,7 +469,7 @@ Unfortunately, it’s not possible at the moment. Kokoro-js only supports Englis
 
 ## Can I pass in images and videos and can it stitch it together
 
-No
+Yes, you can now use images as a source for videos.
 
 ## Should I run the project with `npm` or `docker`?
 
@@ -468,7 +483,7 @@ Remotion is CPU-heavy, and [Kokoro-js](https://github.com/hexgrad/kokoro) runs o
 
 ## Is there a UI that I can use to generate the videos
 
-No (t yet)
+Yes, there is a Web UI available at http://localhost:3123.
 
 ## Can I select different source for the videos than Pexels, or provide my own video
 
@@ -476,7 +491,7 @@ No
 
 ## Can the project generate videos from images?
 
-No
+Yes.
 
 ## Dependencies for the video generation
 
