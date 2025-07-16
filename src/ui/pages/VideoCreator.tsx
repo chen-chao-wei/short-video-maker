@@ -29,6 +29,8 @@ import {
   OrientationEnum,
   MusicVolumeEnum,
 } from "../../types/shorts";
+import { PreviewModal } from "../components/PreviewModal";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface SceneFormData {
   text: string;
@@ -48,6 +50,7 @@ const VideoCreator: React.FC = () => {
     voice: VoiceEnum.af_heart,
     orientation: OrientationEnum.portrait,
     musicVolume: MusicVolumeEnum.high,
+    media_type: "video",
   });
 
   const [loading, setLoading] = useState(false);
@@ -55,6 +58,11 @@ const VideoCreator: React.FC = () => {
   const [voices, setVoices] = useState<VoiceEnum[]>([]);
   const [musicTags, setMusicTags] = useState<MusicMoodEnum[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
+  const [previewItems, setPreviewItems] = useState<any[]>([]);
+  const [activeSceneIndex, setActiveSceneIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -133,6 +141,32 @@ const VideoCreator: React.FC = () => {
       setLoading(false);
     }
   };
+  const handlePreviewClick = async (
+    index: number,
+    term: string,
+    type: "image" | "video",
+  ) => {
+    setActiveSceneIndex(index);
+    setPreviewOpen(true);
+    setPreviewLoading(true);
+    setPreviewError(null);
+
+    try {
+      const response = await axios.get("/api/preview", {
+        params: {
+          term,
+          media_type: type,
+        },
+      });
+
+      setPreviewItems(response.data.results);
+    } catch (err) {
+      setPreviewError("Failed to load preview items");
+      console.error(err);
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
 
   if (loadingOptions) {
     return (
@@ -209,6 +243,25 @@ const VideoCreator: React.FC = () => {
                   }
                   helperText="Enter keywords for background video, separated by commas"
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Button
+                          onClick={() =>
+                            handlePreviewClick(
+                              index,
+                              scene.searchTerms,
+                              config.media_type || "video",
+                            )
+                          }
+                          startIcon={<SearchIcon />}
+                          disabled={!scene.searchTerms.trim()}
+                        >
+                          Preview
+                        </Button>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
@@ -360,6 +413,23 @@ const VideoCreator: React.FC = () => {
                 </Select>
               </FormControl>
             </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel>Media Type</InputLabel>
+                <Select
+                  value={config.media_type || "video"}
+                  onChange={(e) =>
+                    handleConfigChange("media_type", e.target.value)
+                  }
+                  label="Media Type"
+                  required
+                >
+                  <MenuItem value="video">Video</MenuItem>
+                  <MenuItem value="image">Image</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </Paper>
 
@@ -379,6 +449,14 @@ const VideoCreator: React.FC = () => {
             )}
           </Button>
         </Box>
+        <PreviewModal
+          open={previewOpen}
+          onClose={() => setPreviewOpen(false)}
+          items={previewItems}
+          loading={previewLoading}
+          error={previewError}
+          mediaType={config.media_type || "video"}
+        />
       </form>
     </Box>
   );

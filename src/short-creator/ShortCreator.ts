@@ -5,6 +5,7 @@ import cuid from "cuid";
 import path from "path";
 import https from "https";
 import http from "http";
+import { kenBurnsClip, concatVideos } from "./libraries/image_to_video";
 
 import { Kokoro } from "./libraries/Kokoro";
 import { Remotion } from "./libraries/Remotion";
@@ -137,6 +138,57 @@ export class ShortCreator {
       const captions = await this.whisper.CreateCaption(tempWavPath);
 
       await this.ffmpeg.saveToMp3(audioStream, tempMp3Path);
+
+      // 新增：若 media_type == image，取得圖片並下載
+      if (config.media_type === "image") {
+        const duration = 3; // 每張圖片播放幾秒
+        const imageCount = Math.max(1, Math.ceil(audioLength / duration));
+        const imageDuration = audioLength / imageCount;
+        const images = await this.pexelsApi.findImages(
+          scene.searchTerms,
+          imageCount,
+        );
+        const imagePaths: string[] = [];
+        const kenBurnsVideoPaths: string[] = [];
+        for (const img of images) {
+          const imgPath = path.join(
+            this.config.tempDirPath,
+            `pexels_${img.id}.jpg`,
+          );
+          logger.debug(`Downloading image from ${img.url} to ${imgPath}`);
+          const res = await fetch(img.url);
+          if (!res.ok) throw new Error("Failed to download image");
+          const buffer = await res.arrayBuffer();
+          await fs.writeFile(imgPath, Buffer.from(buffer));
+          imagePaths.push(imgPath);
+
+          // Ken Burns 動畫影片路徑
+          const kbVideoPath = path.join(
+            this.config.tempDirPath,
+            `kenburns_${img.id}.mp4`,
+          );
+          logger.debug(`kbVideoPath: ${kbVideoPath}`);
+          // 動畫長度可依需求調整
+          await kenBurnsClip(imgPath, kbVideoPath, imageDuration, 1.2);
+          kenBurnsVideoPaths.push(kbVideoPath);
+        }
+        if (kenBurnsVideoPaths.length > 0) {
+          await concatVideos(kenBurnsVideoPaths, tempVideoPath);
+        }
+        logger.debug(`Ken Burns Video: ${tempVideoPath}`);
+        scenes.push({
+          captions,
+          video: `http://localhost:${this.config.port}/api/tmp/${tempVideoFileName}`,
+          audio: {
+            url: `http://localhost:${this.config.port}/api/tmp/${tempMp3FileName}`,
+            duration: audioLength,
+          },
+        });
+        totalDuration += audioLength;
+        index++;
+        continue;
+      }
+
       const video = await this.pexelsApi.findVideo(
         scene.searchTerms,
         audioLength,
@@ -192,6 +244,13 @@ export class ShortCreator {
 
     const selectedMusic = this.findMusic(totalDuration, config.music);
     logger.debug({ selectedMusic }, "Selected music for the video");
+
+    logger.debug(`totalDuration: ${totalDuration}`);
+    logger.debug(`scenes.length: ${scenes.length}`);
+    if (totalDuration <= 0) {
+      logger.error("影片總長度為 0，無法產生影片");
+      throw new Error("影片總長度為 0，無法產生影片");
+    }
 
     await this.remotion.render(
       {
@@ -293,5 +352,33 @@ export class ShortCreator {
 
   public ListAvailableVoices(): string[] {
     return this.kokoro.listAvailableVoices();
+  }
+
+  public async preview(
+    term: string,
+    mediaType: "image" | "video",
+  ): Promise<
+    {
+      id: string;
+      image: string;
+      url: string;
+      width?: number;
+      height?: number;
+    }[]
+  > {
+    logger.debug({ term, mediaType }, "Previewing media from Pexels");
+
+    if (mediaType === "video") {
+      return await this.pexelsApi.findVideosForPreview(term);
+    } else {
+      const images = await this.pexelsApi.findImages([term], 10);
+      return images.map((img) => ({
+        id: img.id,
+        image: img.url,
+        url: img.url,
+        width: img.width,
+        height: img.height,
+      }));
+    }
   }
 }

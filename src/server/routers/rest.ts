@@ -221,5 +221,44 @@ export class APIRouter {
         }
       },
     );
+
+    this.router.get(
+      "/preview",
+      async (req: ExpressRequest, res: ExpressResponse) => {
+        try {
+          const { term, media_type } = req.query;
+
+          if (!term || typeof term !== "string") {
+            res.status(400).json({
+              error: "term is required and must be a string",
+            });
+            return;
+          }
+
+          if (
+            !media_type ||
+            (media_type !== "image" && media_type !== "video")
+          ) {
+            res.status(400).json({
+              error:
+                "media_type is required and must be either 'image' or 'video'",
+            });
+            return;
+          }
+
+          const results = await this.shortCreator.preview(term, media_type);
+
+          res.status(200).json({
+            results,
+          });
+        } catch (error: unknown) {
+          logger.error(error, "Error getting preview");
+          res.status(500).json({
+            error: "Error getting preview",
+            message: error instanceof Error ? error.message : "Unknown error",
+          });
+        }
+      },
+    );
   }
 }

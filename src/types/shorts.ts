@@ -116,6 +116,7 @@ export const renderConfig = z.object({
     .nativeEnum(MusicVolumeEnum)
     .optional()
     .describe("Volume of the music, default is high"),
+  media_type: z.enum(["video", "image"]).default("video"),
 });
 export type RenderConfig = z.infer<typeof renderConfig>;
 
