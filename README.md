@@ -1,57 +1,49 @@
-## [📚 Join our Skool community for support, premium content and more!](https://www.skool.com/ai-agents-az/about?s1m)
+# 專案說明
 
-### Be part of a growing community and help us create more content like this
+這是一個開源的自動化影片創作工具，用於生成短影音內容。短影音製作工具結合了文字轉語音、自動字幕、背景影片和音樂，可以從簡單的文字輸入創建引人入勝的短影音。
 
-# Description
+這個專案旨在提供一個免費的替代方案，以取代耗費大量 GPU 資源的影片生成（以及昂貴的第三方 API 調用）。它不會根據圖像或圖像提示從頭開始生成影片。
 
-An open source automated video creation tool for generating short-form video content. Short Video Maker combines text-to-speech, automatic captions, background videos, and music to create engaging short videos from simple text inputs.
+伺服器公開了一個 [MCP](https://github.com/modelcontextprotocol) 和一個 REST 伺服器。
 
-This project is meant to provide a free alternative to heavy GPU-power hungry video generation (and a free alternative to expensive, third-party API calls). It doesn't generate a video from scratch based on an image or an image prompt.
+雖然 MCP 伺服器可以與 AI 代理（如 n8n）一起使用，但 REST 端點為影片生成提供了更大的靈活性。
 
-The repository was open-sourced by the [AI Agents A-Z Youtube Channel](https://www.youtube.com/channel/UCloXqLhp_KGhHBe1kwaL2Tg). We encourage you to check out the channel for more AI-related content and tutorials.
+# 目錄
 
-The server exposes an [MCP](https://github.com/modelcontextprotocol) and a REST server.
+## 入門
 
-While the MCP server can be used with an AI Agent (like n8n) the REST endpoints provide more flexibility for video generation.
+- [要求](#一般要求)
+- [如何運行伺服器](#如何運行伺服器)
+- [網頁使用者介面](#網頁使用者介面)
+- [教學](#n8n教學)
+- [範例](#範例)
 
-You can find example n8n workflows created with the REST/MCP server [in this repository](https://github.com/gyoridavid/ai_agents_az/tree/main/episode_7).
+## 用法
 
-# TOC
-
-## Getting started
-
-- [Requirements](#general-requirements)
-- [How to run the server](#getting-started-1)
-- [Web UI](#web-ui)
-- [Tutorial](#tutorial-with-n8n)
-- [Examples](#examples)
-
-## Usage
-
-- [Environment variables](#environment-variables)
+- [環境變數](#環境變數)
 - [REST API](#rest-api)
-- [Configuration options](#configuration-options)
-- [MCP](#mcp-server)
+- [配置選項](#配置選項)
+- [MCP](#mcp伺服器)
 
-## Info
+## 資訊
 
-- [Features](#features)
-- [How it works](#how-it-works)
-- [Limitations](#limitations)
-- [Concepts](#concepts)
-- [Troubleshooting](#troubleshooting)
-- [Deploying in the cloud](#deploying-to-the-cloud)
-- [FAQ](#faq)
-- [Dependencies](#dependencies-for-the-video-generation)
-- [Contributing](#how-to-contribute)
-- [License](#license)
-- [Acknowledgements](#acknowledgments)
+- [功能](#功能)
+- [工作原理](#工作原理)
+- [限制](#限制)
+- [概念](#概念)
+- [故障排除](#故障排除)
+- [雲端部署](#雲端部署)
+- [常見問題](#常見問題)
+- [依賴項](#影片生成依賴項)
+- [貢獻](#如何貢獻)
+- [許可證](#許可證)
+- [致謝](#致謝)
 
-# Tutorial with n8n
+# n8n教學
 
-[![Automated faceless video generation (n8n + MCP) with captions, background music, local and 100% free](https://img.youtube.com/vi/jzsQpn-AciM/0.jpg)](https://www.youtube.com/watch?v=jzsQpn-AciM)
+[![自動化無人影片生成 (n8n + MCP) 帶字幕、背景音樂，本地且 100% 免費](https://img.youtube.com/vi/jzsQpn-AciM/0.jpg)](https://www.youtube.com/watch?v=jzsQpn-AciM)
 
-# Examples
+# 範例
 
 <table>
   <tr>
@@ -65,62 +57,61 @@ You can find example n8n workflows created with the REST/MCP server [in this rep
   </tr>
 </table>
 
-# Features
+# 功能
 
-- Generate complete short videos from text prompts
-- Text-to-speech conversion
-- Automatic caption generation and styling
-- Background video search and selection via Pexels
-- Generate videos from a series of images with a Ken Burns effect
-- Media preview functionality to see images/videos before rendering
-- Background music with genre/mood selection
-- Serve as both REST API and Model Context Protocol (MCP) server
+- 從文字提示生成完整的短影音
+- 文字轉語音轉換
+- 自動字幕生成和樣式設定
+- 透過 Pexels 搜尋和選擇背景影片
+- 從一系列圖像生成帶有 Ken Burns 效果的影片
+- 媒體預覽功能，可在渲染前查看圖像/影片
+- 帶有類型/情緒選擇的背景音樂
+- 作為 REST API 和模型上下文協議 (MCP) 伺服器
 
-# How It Works
+# 工作原理
 
-Shorts Creator takes simple text inputs and search terms, then:
+短影音創作者接收簡單的文字輸入和搜尋詞，然後：
 
-1. Converts text to speech using Kokoro TTS
-2. Generates accurate captions via Whisper
-3. Finds relevant background videos from Pexels. If the source is images, it creates animated clips using the Ken Burns effect.
-4. Composes all elements with Remotion
-5. Renders a professional-looking short video with perfectly timed captions
+1. 使用 Kokoro TTS 將文字轉換為語音
+2. 透過 Whisper 生成準確的字幕
+3. 從 Pexels 尋找相關的背景影片。如果來源是圖像，則使用 Ken Burns 效果創建動畫片段。
+4. 使用 Remotion 組合所有元素
+5. 渲染帶有完美定時字幕的專業短影音
 
-# Limitations
+# 限制
 
-- The project only capable generating videos with English voiceover (kokoro-js doesn’t support other languages at the moment)
-- The background videos are sourced from Pexels
+- 該專案目前只能生成英文配音的影片 (kokoro-js 暫不支援其他語言)
+- 背景影片來源於 Pexels
 
-# General Requirements
+# 一般要求
 
-- internet
-- free pexels api key
-- ≥ 3 gb free RAM, my recommendation is 4gb RAM
-- ≥ 2 vCPU
-- ≥ 5gb disc space
+- 網路
+- 免費 Pexels API 金鑰
+- ≥ 3 GB 可用記憶體，建議 4 GB 記憶體
+- ≥ 2 個虛擬 CPU
+- ≥ 5 GB 磁碟空間
 
+# 概念
 
-# Concepts
+## 場景
 
-## Scene
+每個影片都由多個場景組成。這些場景包括：
 
-Each video is assembled from multiple scenes. These scenes consists of
+1. 文字：旁白，TTS 將讀取並從中創建字幕的文字。
+2. 搜尋詞：伺服器應用於從 Pexels API 尋找影片的關鍵字。如果找不到，則使用通用詞 (`nature`, `globe`, `space`, `ocean`)
 
-1. Text: Narration, the text the TTS will read and create captions from.
-2. Search terms: The keywords the server should use to find videos from Pexels API. If none can be found, joker terms are being used (`nature`, `globe`, `space`, `ocean`)
+# 入門
 
-# Getting started
+## Docker (推薦)
 
-## Docker (recommended)
-
-There are three docker images, for three different use cases. Generally speaking, most of the time you want to spin up the `tiny` one.
+有三種 Docker 映像檔，適用於三種不同的使用案例。一般來說，大多數時候您會想啟動 `tiny` 映像檔。
 
 ### Tiny
 
-- Uses the `tiny.en` whisper.cpp model
-- Uses the `q4` quantized kokoro model
-- `CONCURRENCY=1` to overcome OOM errors coming from Remotion with limited resources
-- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2gb) to overcome OOM errors coming from Remotion with limited resources
+- 使用 `tiny.en` whisper.cpp 模型
+- 使用 `q4` 量化 kokoro 模型
+- `CONCURRENCY=1` 以克服 Remotion 在資源有限時出現的 OOM 錯誤
+- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2GB) 以克服 Remotion 在資源有限時出現的 OOM 錯誤
 
 ```jsx
 docker run -it --rm --name short-video-maker -p 3123:3123 -e LOG_LEVEL=debug -e PEXELS_API_KEY= gyoridavid/short-video-maker:latest-tiny
@@ -128,10 +119,10 @@ docker run -it --rm --name short-video-maker -p 3123:3123 -e LOG_LEVEL=debug -e 
 
 ### Normal
 
-- Uses the `base.en` whisper.cpp model
-- Uses the `fp32` kokoro model
-- `CONCURRENCY=1` to overcome OOM errors coming from Remotion with limited resources
-- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2gb) to overcome OOM errors coming from Remotion with limited resources
+- 使用 `base.en` whisper.cpp 模型
+- 使用 `fp32` kokoro 模型
+- `CONCURRENCY=1` 以克服 Remotion 在資源有限時出現的 OOM 錯誤
+- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2GB) 以克服 Remotion 在資源有限時出現的 OOM 錯誤
 
 ```jsx
 docker run -it --rm --name short-video-maker -p 3123:3123 -e LOG_LEVEL=debug -e PEXELS_API_KEY= gyoridavid/short-video-maker:latest
@@ -139,20 +130,20 @@ docker run -it --rm --name short-video-maker -p 3123:3123 -e LOG_LEVEL=debug -e 
 
 ### Cuda
 
-If you own an Nvidia GPU and you want use a larger whisper model with GPU acceleration, you can use the CUDA optimised Docker image.
+如果您擁有 Nvidia GPU 並希望使用更大的 whisper 模型並進行 GPU 加速，您可以使用 CUDA 優化的 Docker 映像檔。
 
-- Uses the `medium.en` whisper.cpp model (with GPU acceleration)
-- Uses `fp32` kokoro model
-- `CONCURRENCY=1` to overcome OOM errors coming from Remotion with limited resources
-- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2gb) to overcome OOM errors coming from Remotion with limited resources
+- 使用 `medium.en` whisper.cpp 模型 (帶 GPU 加速)
+- 使用 `fp32` kokoro 模型
+- `CONCURRENCY=1` 以克服 Remotion 在資源有限時出現的 OOM 錯誤
+- `VIDEO_CACHE_SIZE_IN_BYTES=2097152000` (2GB) 以克服 Remotion 在資源有限時出現的 OOM 錯誤
 
 ```jsx
 docker run -it --rm --name short-video-maker -p 3123:3123 -e LOG_LEVEL=debug -e PEXELS_API_KEY= --gpus=all gyoridavid/short-video-maker:latest-cuda
 ```
 
-## Docker compose
+## Docker Compose
 
-You might use Docker Compose to run n8n or other services, and you want to combine them. Make sure you add the shared network to the service configuration.
+您可以使用 Docker Compose 運行 n8n 或其他服務，並希望將它們組合起來。請確保將共享網路添加到服務配置中。
 
 ```bash
 version: "3"
@@ -170,26 +161,26 @@ services:
 
 ```
 
-If you are using the [Self-hosted AI starter kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) you want to add `networks: ['demo']` to the\*\* `short-video-maker` service so you can reach it with http://short-video-maker:3123 in n8n.
+如果您正在使用 [Self-hosted AI starter kit](https://github.com/n8n-io/self-hosted-ai-starter-kit)，您需要將 `networks: ['demo']` 添加到 `short-video-maker` 服務中，以便您可以在 n8n 中透過 http://short-video-maker:3123 訪問它。
 
 # NPM
 
-While Docker is the recommended way to run the project, you can run it with npm or npx.
-On top of the general requirements, the following are necessary to run the server.
+雖然 Docker 是運行此專案的推薦方式，但您也可以使用 npm 或 npx 運行它。
+除了一般要求外，運行伺服器還需要以下條件。
 
-## Supported platforms
+## 支援的平台
 
-- Ubuntu ≥ 22.04 (libc 2.5 for Whisper.cpp)
-  - Required packages: `git wget cmake ffmpeg curl make libsdl2-dev libnss3 libdbus-1-3 libatk1.0-0 libgbm-dev libasound2 libxrandr2 libxkbcommon-dev libxfixes3 libxcomposite1 libxdamage1 libatk-bridge2.0-0 libpango-1.0-0 libcairo2 libcups2`
+- Ubuntu ≥ 22.04 (Whisper.cpp 需要 libc 2.5)
+  - 所需套件：`git wget cmake ffmpeg curl make libsdl2-dev libnss3 libdbus-1-3 libatk1.0-0 libgbm-dev libasound2 libxrandr2 libxkbcommon-dev libxfixes3 libxcomposite1 libxdamage1 libatk-bridge2.0-0 libpango-1.0-0 libcairo2 libcups2`
 - Mac OS
   - ffmpeg (`brew install ffmpeg`)
-  - node.js (tested on 22+)
+  - node.js (在 22+ 版本上測試)
 
-Windows is **NOT** supported at the moment (whisper.cpp installation fails occasionally).
+目前不支援 Windows (whisper.cpp 安裝偶爾會失敗)。
 
-# Web UI
+# 網頁使用者介面
 
-@mushitori made a Web UI to generate the videos from your browser.
+@mushitori 製作了一個網頁使用者介面，讓您可以從瀏覽器生成影片。
 
 <table>
   <tr>
@@ -208,69 +199,69 @@ Windows is **NOT** supported at the moment (whisper.cpp installation fails occas
   </tr>
 </table>
 
-You can load it on http://localhost:3123
+您可以在 http://localhost:3123 載入它。
 
-# Environment variables
+# 環境變數
 
-## 🟢 Configuration
+## 🟢 配置
 
-| key             | description                                                     | default |
-| --------------- | --------------------------------------------------------------- | ------- |
-| PEXELS_API_KEY  | [your (free) Pexels API key](https://www.pexels.com/api/)       |         |
-| LOG_LEVEL       | pino log level                                                  | info    |
-| WHISPER_VERBOSE | whether the output of whisper.cpp should be forwarded to stdout | false   |
-| PORT            | the port the server will listen on                              | 3123    |
+| key             | 說明                                                       | 預設值 |
+| --------------- | ---------------------------------------------------------- | ------ |
+| PEXELS_API_KEY  | [您的 (免費) Pexels API 金鑰](https://www.pexels.com/api/) |        |
+| LOG_LEVEL       | pino 日誌級別                                              | info   |
+| WHISPER_VERBOSE | whisper.cpp 的輸出是否應轉發到標準輸出                     | false  |
+| PORT            | 伺服器將監聽的埠號                                         | 3123   |
 
-## ⚙️ System configuration
+## ⚙️ 系統配置
 
-| key                       | description                                                                                                                                                                                                                                                                           | default                                                     |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| KOKORO_MODEL_PRECISION    | The size of the Kokoro model to use. Valid options are `fp32`, `fp16`, `q8`, `q4`, `q4f16`                                                                                                                                                                                            | depends, see the descriptions of the docker images above ^^ |
-| CONCURRENCY               | [concurrency refers to how many browser tabs are opened in parallel during a render. Each Chrome tab renders web content and then screenshots it.](https://www.remotion.dev/docs/terminology/concurrency). Tweaking this value helps with running the project with limited resources. | depends, see the descriptions of the docker images above ^^ |
-| VIDEO_CACHE_SIZE_IN_BYTES | Cache for [<OffthreadVideo>](https://remotion.dev/docs/offthreadvideo) frames in Remotion. Tweaking this value helps with running the project with limited resources.                                                                                                                 | depends, see the descriptions of the docker images above ^^ |
+| key                       | 說明                                                                                                                                                                                      | 預設值                            |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| KOKORO_MODEL_PRECISION    | 要使用的 Kokoro 模型大小。有效選項為 `fp32`、`fp16`、`q8`、`q4`、`q4f16`                                                                                                                  | 取決於上述 Docker 映像檔的說明 ^^ |
+| CONCURRENCY               | [並發性是指在渲染期間同時打開的瀏覽器標籤數量。每個 Chrome 標籤渲染網頁內容然後截圖。](https://www.remotion.dev/docs/terminology/concurrency)。調整此值有助於在資源有限的情況下運行專案。 | 取決於上述 Docker 映像檔的說明 ^^ |
+| VIDEO_CACHE_SIZE_IN_BYTES | Remotion 中 [<OffthreadVideo>](https://remotion.dev/docs/offthreadvideo) 影格的快取。調整此值有助於在資源有限的情況下運行專案。                                                           | 取決於上述 Docker 映像檔的說明 ^^ |
 
-## ⚠️ Danger zone
+## ⚠️ 危險區域
 
-| key           | description                                                                                                                                                                              | default                                                                                              |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| WHISPER_MODEL | Which whisper.cpp model to use. Valid options are `tiny`, `tiny.en`, `base`, `base.en`, `small`, `small.en`, `medium`, `medium.en`, `large-v1`, `large-v2`, `large-v3`, `large-v3-turbo` | Depends, see the descriptions of the docker images above. For npm, the default option is `medium.en` |
-| DATA_DIR_PATH | the data directory of the project                                                                                                                                                        | `~/.ai-agents-az-video-generator` with npm, `/app/data` in the Docker images                         |
-| DOCKER        | whether the project is running in a Docker container                                                                                                                                     | `true` for the docker images, otherwise `false`                                                      |
-| DEV           | guess! :)                                                                                                                                                                                | `false`                                                                                              |
+| key           | 說明                                                                                                                                                                         | 預設值                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| WHISPER_MODEL | 要使用的 whisper.cpp 模型。有效選項為 `tiny`、`tiny.en`、`base`、`base.en`、`small`、`small.en`、`medium`、`medium.en`、`large-v1`、`large-v2`、`large-v3`、`large-v3-turbo` | 取決於上述 Docker 映像檔的說明。對於 npm，預設選項為 `medium.en`      |
+| DATA_DIR_PATH | 專案的資料目錄                                                                                                                                                               | npm 為 `~/.ai-agents-az-video-generator`，Docker 映像檔為 `/app/data` |
+| DOCKER        | 專案是否在 Docker 容器中運行                                                                                                                                                 | Docker 映像檔為 `true`，否則為 `false`                                |
+| DEV           | 猜猜看！ :)                                                                                                                                                                  | `false`                                                               |
 
-# Configuration options
+# 配置選項
 
-| key                    | description                                                                                                    | default    |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------- | ---------- |
-| paddingBack            | The end screen, for how long the video should keep playing after the narration has finished (in milliseconds). | 0          |
-| music                  | The mood of the background music. Get the available options from the GET `/api/music-tags` endpoint.           | random     |
-| captionPosition        | The position where the captions should be rendered. Possible options: `top`, `center`, `bottom`. Default value | `bottom`   |
-| captionBackgroundColor | The background color of the active caption item.                                                               | `blue`     |
-| voice                  | The Kokoro voice.                                                                                              | `af_heart` |
-| orientation            | The video orientation. Possible options are `portrait` and `landscape`                                         | `portrait` |
-| musicVolume            | Set the volume of the background music. Possible options are `low` `medium` `high` and `muted`                 | `high`     |
-| media_type             | The source of the visuals. Can be `video` or `image`.                                                          | `video`    |
+| key                    | 說明                                                            | 預設值     |
+| ---------------------- | --------------------------------------------------------------- | ---------- |
+| paddingBack            | 結束畫面，旁白結束後影片應繼續播放多長時間 (毫秒)。             | 0          |
+| music                  | 背景音樂的情緒。從 GET `/api/music-tags` 端點獲取可用選項。     | random     |
+| captionPosition        | 字幕應渲染的位置。可能選項：`top`、`center`、`bottom`。預設值   | `bottom`   |
+| captionBackgroundColor | 活動字幕項目的背景顏色。                                        | `blue`     |
+| voice                  | Kokoro 語音。                                                   | `af_heart` |
+| orientation            | 影片方向。可能選項為 `portrait` 和 `landscape`                  | `portrait` |
+| musicVolume            | 設定背景音樂的音量。可能選項為 `low` `medium` `high` 和 `muted` | `high`     |
+| media_type             | 視覺效果的來源。可以是 `video` 或 `image`。                     | `video`    |
 
-# Usage
+# 用法
 
-## MCP server
+## MCP 伺服器
 
-## Server URLs
+## 伺服器 URL
 
 `/mcp/sse`
 
 `/mcp/messages`
 
-## Available tools
+## 可用工具
 
-- `create-short-video` Creates a short video - the LLM will figure out the right configuration. If you want to use specific configuration, you need to specify those in you prompt.
-- `get-video-status` Somewhat useless, it’s meant for checking the status of the video, but since the AI agents aren’t really good with the concept of time, you’ll probably will end up using the REST API for that anyway.
+- `create-short-video` 創建短影音 - LLM 將找出正確的配置。如果您想使用特定配置，則需要在提示中指定這些配置。
+- `get-video-status` 有點無用，它用於檢查影片的狀態，但由於 AI 代理在時間概念上並不是很擅長，您可能最終還是會使用 REST API 來處理。
 
 # REST API
 
 ### GET `/health`
 
-Healthcheck endpoint
+健康檢查端點
 
 ```bash
 curl --location 'localhost:3123/health'
@@ -325,7 +316,7 @@ curl --location 'localhost:3123/api/short-video/cm9ekme790000hysi5h4odlt1/status
 curl --location 'localhost:3123/api/short-video/cm9ekme790000hysi5h4odlt1'
 ```
 
-Response: the binary data of the video.
+回應：影片的二進位資料。
 
 ### GET `/api/short-videos`
 
@@ -420,102 +411,103 @@ curl --location 'localhost:3123/api/music-tags'
 
 ### GET `/api/preview`
 
-Returns a list of images or videos for a given search term.
+返回指定搜尋詞的圖像或影片列表。
 
-**Query Parameters:**
-- `term` (string, required): The search term.
-- `media_type` ('image' | 'video', required): The type of media to preview.
+**查詢參數：**
+
+- `term` (字串，必填)：搜尋詞。
+- `media_type` ('image' | 'video'，必填)：要預覽的媒體類型。
 
 ```bash
 cURL localhost:3123/api/preview?term=nature&media_type=image
 ```
 
-# Troubleshooting
+# 故障排除
 
 ## Docker
 
-The server needs at least 3gb free memory. Make sure to allocate enough RAM to Docker.
+伺服器至少需要 3GB 可用記憶體。請確保為 Docker 分配足夠的記憶體。
 
-If you are running the server from Windows and via wsl2, you need to set the resource limits from the [wsl utility 2](https://learn.microsoft.com/en-us/windows/wsl/wsl-config#configure-global-options-with-wslconfig) - otherwise set it from Docker Desktop. (Ubuntu is not restricting the resources unless specified with the run command).
+如果您在 Windows 上透過 wsl2 運行伺服器，則需要從 [wsl utility 2](https://learn.microsoft.com/en-us/windows/wsl/wsl-config#configure-global-options-with-wslconfig) 設定資源限制 - 否則從 Docker Desktop 設定。（Ubuntu 不會限制資源，除非在運行命令中指定）。
 
 ## NPM
 
-Make sure all the necessary packages are installed.
+確保所有必要的套件都已安裝。
 
 # n8n
 
-Setting up the MCP (or REST) server depends on how you run n8n and the server. Please follow the examples from the matrix below.
+設定 MCP (或 REST) 伺服器取決於您如何運行 n8n 和伺服器。請遵循以下矩陣中的範例。
 
-|                                                   | n8n is running locally, using `n8n start`              | n8n is running locally using Docker                                                                                                                                                                                           | n8n is running in the cloud                            |
-| ------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `short-video-maker` is running in Docker, locally | `http://localhost:3123`                                | It depends. You can technically use `http://host.docker.internal:3123` as it points to the host, but you could configure to use the same network and use the service name to communicate like `http://short-video-maker:3123` | won’t work - deploy `short-video-maker` to the cloud   |
-| `short-video-maker` is running with npm/npx       | `http://localhost:3123`                                | `http://host.docker.internal:3123`                                                                                                                                                                                            | won’t work - deploy `short-video-maker` to the cloud   |
-| `short-video-maker` is running in the cloud       | You should use your IP address `http://{YOUR_IP}:3123` | You should use your IP address `http://{YOUR_IP}:3123`                                                                                                                                                                        | You should use your IP address `http://{YOUR_IP}:3123` |
+|                                          | n8n 在本地運行，使用 `n8n start`               | n8n 在本地運行，使用 Docker                                                                                                                                         | n8n 在雲端運行                                 |
+| ---------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `short-video-maker` 在本地 Docker 中運行 | `http://localhost:3123`                        | 這取決於情況。您可以使用 `http://host.docker.internal:3123`，因為它指向主機，但您可以配置使用相同的網路並使用服務名稱進行通信，例如 `http://short-video-maker:3123` | 無法工作 - 將 `short-video-maker` 部署到雲端   |
+| `short-video-maker` 使用 npm/npx 運行    | `http://localhost:3123`                        | `http://host.docker.internal:3123`                                                                                                                                  | 無法工作 - 將 `short-video-maker` 部署到雲端   |
+| `short-video-maker` 在雲端運行           | 您應該使用您的 IP 位址 `http://{YOUR_IP}:3123` | 您應該使用您的 IP 位址 `http://{YOUR_IP}:3123`                                                                                                                      | 您應該使用您的 IP 位址 `http://{YOUR_IP}:3123` |
 
-# Deploying to the cloud
+# 雲端部署
 
-While each VPS provider is different, and it’s impossible to provide configuration to all of them, here are some tips.
+雖然每個 VPS 提供商都不同，並且不可能為所有提供商提供配置，但這裡有一些提示。
 
-- Use Ubuntu ≥ 22.04
-- Have ≥ 4gb RAM, ≥ 2vCPUs and ≥5gb storage
-- Use [pm2](https://pm2.keymetrics.io/) to run/manage the server
-- Put the environment variables to the `.bashrc` file (or similar)
+- 使用 Ubuntu ≥ 22.04
+- 擁有 ≥ 4GB 記憶體、≥ 2 個虛擬 CPU 和 ≥ 5GB 儲存空間
+- 使用 [pm2](https://pm2.keymetrics.io/) 運行/管理伺服器
+- 將環境變數放入 `.bashrc` 文件 (或類似文件)
 
-# FAQ
+# 常見問題
 
-## Can I use other languages? (French, German etc.)
+## 我可以使用其他語言嗎？ (法語、德語等)
 
-Unfortunately, it’s not possible at the moment. Kokoro-js only supports English.
+不幸的是，目前還不行。Kokoro-js 只支援英文。
 
-## Can I pass in images and videos and can it stitch it together
+## 我可以傳入圖像和影片並將它們拼接在一起嗎？
 
-Yes, you can now use images as a source for videos.
+是的，您現在可以使用圖像作為影片的來源。
 
-## Should I run the project with `npm` or `docker`?
+## 我應該使用 `npm` 還是 `docker` 運行專案？
 
-Docker is the recommended way to run the project.
+Docker 是運行此專案的推薦方式。
 
-## How much GPU is being used for the video generation?
+## 影片生成使用了多少 GPU？
 
-Honestly, not a lot - only whisper.cpp can be accelerated.
+老實說，不多 - 只有 whisper.cpp 可以加速。
 
-Remotion is CPU-heavy, and [Kokoro-js](https://github.com/hexgrad/kokoro) runs on the CPU.
+Remotion 是 CPU 密集型的，而 [Kokoro-js](https://github.com/hexgrad/kokoro) 在 CPU 上運行。
 
-## Is there a UI that I can use to generate the videos
+## 有沒有我可以使用的 UI 來生成影片？
 
-Yes, there is a Web UI available at http://localhost:3123.
+是的，有一個網頁使用者介面可在 http://localhost:3123 獲取。
 
-## Can I select different source for the videos than Pexels, or provide my own video
+## 我可以選擇 Pexels 以外的影片來源，或提供自己的影片嗎？
 
-No
+不行
 
-## Can the project generate videos from images?
+## 該專案可以從圖像生成影片嗎？
 
-Yes.
+是的。
 
-## Dependencies for the video generation
+# 影片生成依賴項
 
-| Dependency                                             | Version  | License                                                                           | Purpose                         |
-| ------------------------------------------------------ | -------- | --------------------------------------------------------------------------------- | ------------------------------- |
-| [Remotion](https://remotion.dev/)                      | ^4.0.286 | [Remotion License](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) | Video composition and rendering |
-| [Whisper CPP](https://github.com/ggml-org/whisper.cpp) | v1.5.5   | MIT                                                                               | Speech-to-text for captions     |
-| [FFmpeg](https://ffmpeg.org/)                          | ^2.1.3   | LGPL/GPL                                                                          | Audio/video manipulation        |
-| [Kokoro.js](https://www.npmjs.com/package/kokoro-js)   | ^1.2.0   | MIT                                                                               | Text-to-speech generation       |
-| [Pexels API](https://www.pexels.com/api/)              | N/A      | [Pexels Terms](https://www.pexels.com/license/)                                   | Background videos               |
+| 依賴項                                                 | 版本     | 許可證                                                                           | 用途               |
+| ------------------------------------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------ |
+| [Remotion](https://remotion.dev/)                      | ^4.0.286 | [Remotion 許可證](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md) | 影片合成和渲染     |
+| [Whisper CPP](https://github.com/ggml-org/whisper.cpp) | v1.5.5   | MIT                                                                              | 語音轉文字用於字幕 |
+| [FFmpeg](https://ffmpeg.org/)                          | ^2.1.3   | LGPL/GPL                                                                         | 音訊/影片操作      |
+| [Kokoro.js](https://www.npmjs.com/package/kokoro-js)   | ^1.2.0   | MIT                                                                              | 文字轉語音生成     |
+| [Pexels API](https://www.pexels.com/api/)              | N/A      | [Pexels 條款](https://www.pexels.com/license/)                                   | 背景影片           |
 
-## How to contribute?
+## 如何貢獻？
 
-PRs are welcome.
-See the [CONTRIBUTING.md](CONTRIBUTING.md) file for instructions on setting up a local development environment.
+歡迎提交 PR。
+請參閱 [CONTRIBUTING.md](CONTRIBUTING.md) 文件以獲取設定本地開發環境的說明。
 
-## License
+## 許可證
 
-This project is licensed under the [MIT License](LICENSE).
+本專案根據 [MIT 許可證](LICENSE) 授權。
 
-## Acknowledgments
+## 致謝
 
-- ❤️ [Remotion](https://remotion.dev/) for programmatic video generation
-- ❤️ [Whisper](https://github.com/ggml-org/whisper.cpp) for speech-to-text
-- ❤️ [Pexels](https://www.pexels.com/) for video content
-- ❤️ [FFmpeg](https://ffmpeg.org/) for audio/video processing
-- ❤️ [Kokoro](https://github.com/hexgrad/kokoro) for TTS
+- ❤️ [Remotion](https://remotion.dev/) 用於程式化影片生成
+- ❤️ [Whisper](https://github.com/ggml-org/whisper.cpp) 用於語音轉文字
+- ❤️ [Pexels](https://www.pexels.com/) 用於影片內容
+- ❤️ [FFmpeg](https://ffmpeg.org/) 用於音訊/影片處理
+- ❤️ [Kokoro](https://github.com/hexgrad/kokoro) 用於 TTS
